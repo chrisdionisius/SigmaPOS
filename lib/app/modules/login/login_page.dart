@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sigma_pos/app/modules/login/login_controller.dart';
+import 'package:sigma_pos/app/modules/product/product_page.dart';
 import 'package:sigma_pos/app/widget/main_textfield.dart';
 import 'package:sigma_pos/app/widget/password_textfield.dart';
 
@@ -35,8 +36,15 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 20),
               MainButton(
                 label: 'Login',
-                onPressed: () {},
+                onPressed: () => Get.to(
+                  () => const ProductPage(),
+                ),
               ),
+              // const SizedBox(height: 10),
+              // MainButton(
+              //   label: 'Daftar',
+              //   onPressed: () {},
+              // ),
             ],
           ),
         ),
