@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sigma_pos/app/data/models/product.dart';
 import 'package:sigma_pos/app/modules/product/product_page.dart';
 
 import 'custom_divider.dart';

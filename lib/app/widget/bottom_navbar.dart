@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sigma_pos/app/modules/order/order_page.dart';
+import 'package:sigma_pos/app/modules/product/product_page.dart';
+import 'package:sigma_pos/app/modules/sales_report/sales_report_page.dart';
 
 class CustomBottomNavbar extends StatelessWidget {
   const CustomBottomNavbar({Key? key}) : super(key: key);
@@ -19,6 +23,21 @@ class CustomBottomNavbar extends StatelessWidget {
           topRight: Radius.circular(20.0),
         ),
         child: BottomNavigationBar(
+          onTap: (value) {
+            switch (value) {
+              case 0:
+                Get.to(() => const ProductPage());
+                break;
+              case 1:
+                Get.to(() => const OrderPage());
+                break;
+              case 2:
+                Get.to(() => const SalesReportPage());
+                break;
+              default:
+                Get.to(() => const ProductPage());
+            }
+          },
           iconSize: 30,
           showUnselectedLabels: true,
           unselectedItemColor: Colors.grey,

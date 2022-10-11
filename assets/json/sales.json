@@ -1,0 +1,147 @@
+[
+    {
+        "id":"43534dsdsf",
+        "customer": "Yono karbu",
+        "date": "2022-01-01",
+        "time": "18.45",
+        "discount": 3000,
+        "total": 60000,
+        "bayar": 100000,
+        "products": [
+            {
+                "id": 1,
+                "name": "Tahu Walik",
+                "price": 10000,
+                "amount": 1
+            },
+            {
+                "id": 2,
+                "name": "Bakso",
+                "price": 10000,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "name": "Tempura",
+                "price": 10000,
+                "amount": 3
+            }
+        ]
+    },
+    {
+        "id":"gjf95ldf;s",
+        "customer": "Dionisius",
+        "date": "2022-10-02",
+        "time": "18.45",
+        "discount": 3000,
+        "total": 60000,
+        "bayar": 100000,
+        "products": [
+            {
+                "id": 1,
+                "name": "Tahu Walik",
+                "price": 10000,
+                "amount": 1
+            },
+            {
+                "id": 2,
+                "name": "Bakso",
+                "price": 10000,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "name": "Tempura",
+                "price": 10000,
+                "amount": 3
+            }
+        ]
+    },
+    {
+        "id":"gjf95ldf;s",
+        "customer": "Dionisius",
+        "date": "2022-10-02",
+        "time": "18.45",
+        "discount": 3000,
+        "total": 60000,
+        "bayar": 100000,
+        "products": [
+            {
+                "id": 1,
+                "name": "Tahu Walik",
+                "price": 10000,
+                "amount": 1
+            },
+            {
+                "id": 2,
+                "name": "Bakso",
+                "price": 10000,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "name": "Tempura",
+                "price": 10000,
+                "amount": 3
+            }
+        ]
+    },
+    {
+        "id":"gjf95ldf;s",
+        "customer": "Dionisius",
+        "date": "2022-10-02",
+        "time": "18.45",
+        "discount": 3000,
+        "total": 60000,
+        "bayar": 100000,
+        "products": [
+            {
+                "id": 1,
+                "name": "Tahu Walik",
+                "price": 10000,
+                "amount": 1
+            },
+            {
+                "id": 2,
+                "name": "Bakso",
+                "price": 10000,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "name": "Tempura",
+                "price": 10000,
+                "amount": 3
+            }
+        ]
+    },
+    {
+        "id":"gjf95ldf;s",
+        "customer": "Dionisius",
+        "date": "2022-10-02",
+        "time": "18.45",
+        "discount": 3000,
+        "total": 60000,
+        "bayar": 100000,
+        "products": [
+            {
+                "id": 1,
+                "name": "Tahu Walik",
+                "price": 10000,
+                "amount": 1
+            },
+            {
+                "id": 2,
+                "name": "Bakso",
+                "price": 10000,
+                "amount": 2
+            },
+            {
+                "id": 3,
+                "name": "Tempura",
+                "price": 10000,
+                "amount": 3
+            }
+        ]
+    }
+]
