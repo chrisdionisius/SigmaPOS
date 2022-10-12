@@ -249,7 +249,9 @@ class ProductPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavbar(),
+      bottomNavigationBar: const CustomBottomNavbar(
+        choosenIndex: 0,
+      ),
     );
   }
 }

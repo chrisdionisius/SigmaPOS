@@ -280,7 +280,9 @@ class OrderPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavbar(),
+      bottomNavigationBar: const CustomBottomNavbar(
+        choosenIndex: 1,
+      ),
     );
   }
 }

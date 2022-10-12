@@ -5,7 +5,9 @@ import 'package:sigma_pos/app/modules/product/product_page.dart';
 import 'package:sigma_pos/app/modules/sales_report/sales_report_page.dart';
 
 class CustomBottomNavbar extends StatelessWidget {
-  const CustomBottomNavbar({Key? key}) : super(key: key);
+  const CustomBottomNavbar({Key? key, required this.choosenIndex})
+      : super(key: key);
+  final int choosenIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class CustomBottomNavbar extends StatelessWidget {
           topRight: Radius.circular(20.0),
         ),
         child: BottomNavigationBar(
+          currentIndex: choosenIndex,
           onTap: (value) {
             switch (value) {
               case 0:
@@ -45,9 +48,9 @@ class CustomBottomNavbar extends StatelessWidget {
             BottomNavigationBarItem(
                 icon: Icon(Icons.food_bank), label: 'Produk'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.timelapse_sharp), label: 'Order'),
+                icon: Icon(Icons.watch_later), label: 'Order'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.monetization_on), label: 'Sales'),
+                icon: Icon(Icons.attach_money), label: 'Sales'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings), label: 'Setting'),
           ],

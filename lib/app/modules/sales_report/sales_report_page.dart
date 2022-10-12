@@ -35,16 +35,10 @@ class SalesReportPage extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Color.fromRGBO(250, 250, 250, 1),
-              ),
-              onPressed: () {},
-            ),
+        actions: const [
+          Icon(
+            Icons.shopping_cart,
+            color: Color.fromRGBO(250, 250, 250, 1),
           ),
         ],
       ),
@@ -99,7 +93,9 @@ class SalesReportPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavbar(),
+      bottomNavigationBar: const CustomBottomNavbar(
+        choosenIndex: 2,
+      ),
     );
   }
 }

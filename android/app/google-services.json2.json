@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "397488693",
+    "project_id": "sigmapos-13",
+    "storage_bucket": "sigmapos-13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397488693:android:4f3ab784d4fc8e05a0377c",
+        "android_client_info": {
+          "package_name": "com.example.sigma_pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397488693-vjccb85kqrm65l37ucjjgiql8ojj50a6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPyj82ueokSwBKRSqGp0tNr_mXaD17k0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397488693-vjccb85kqrm65l37ucjjgiql8ojj50a6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "397488693-qg1kbjdkips1bvh3tviet5fk6vj4sb20.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sigmaPos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
