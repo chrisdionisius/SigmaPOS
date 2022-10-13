@@ -31,7 +31,7 @@ class Order {
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {
-        products!.add(Product.fromJson(v));
+        products!.add(Product.fromJson(v, 'a'));
       });
     }
   }

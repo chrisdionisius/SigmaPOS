@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sigma_pos/app/data/states/order_state.dart';
+import 'package:sigma_pos/app/modules/order/order_controller.dart';
 import 'package:sigma_pos/app/widget/custom_divider.dart';
 import 'package:sigma_pos/app/widget/modal_textfield.dart';
 import 'package:sigma_pos/app/widget/payment_notification_dialog.dart';
 
 class PaymentDialog extends StatelessWidget {
-  const PaymentDialog({Key? key}) : super(key: key);
+  const PaymentDialog({Key? key, required this.controller}) : super(key: key);
+  final OrderController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,8 @@ class PaymentDialog extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 10),
-                const ModalTextField(
+                ModalTextField(
+                  controller: controller.nameController,
                   hint: 'Nama customer',
                 ),
                 const SizedBox(height: 10),
@@ -53,8 +57,9 @@ class PaymentDialog extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 10),
-                const ModalTextField(
-                  prefix: Text(
+                ModalTextField(
+                  controller: controller.paymentController,
+                  prefix: const Text(
                     'Rp ',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
@@ -68,16 +73,16 @@ class PaymentDialog extends StatelessWidget {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Total',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                     ),
                     Text(
-                      'Rp 0',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                      'Rp ${controller.formatter.format(OrderState.total.value)}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 20),
                     ),
                   ],
                 ),
@@ -87,13 +92,12 @@ class PaymentDialog extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Get.back();
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const PaymentNotificationDialog();
-                },
-              );
+              if (controller.isValid()) {
+                Get.back();
+                Get.dialog(PaymentNotificationDialog(controller: controller));
+              } else {
+                Get.snackbar("Error", "Please fill all the field");
+              }
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 10),

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sigma_pos/app/modules/order/order_controller.dart';
 import 'package:sigma_pos/app/modules/product/product_page.dart';
 
+import '../data/states/order_state.dart';
 import 'custom_divider.dart';
 
 class PaymentNotificationDialog extends StatelessWidget {
-  const PaymentNotificationDialog({Key? key}) : super(key: key);
+  const PaymentNotificationDialog({Key? key, required this.controller})
+      : super(key: key);
+
+  final OrderController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -33,32 +38,32 @@ class PaymentNotificationDialog extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Total',
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                     ),
                     Text(
-                      'Rp 60.000',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                      'Rp. ${controller.formatter.format(OrderState.total.value)}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 20),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Bayar',
                       style:
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                     ),
                     Text(
-                      'Rp 100.000',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                      'Rp${controller.formatter.format(int.parse(controller.paymentController.text))}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 20),
                     ),
                   ],
                 ),
@@ -70,16 +75,16 @@ class PaymentNotificationDialog extends StatelessWidget {
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Kembali',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                     ),
                     Text(
-                      'Rp 40.000',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                      'Rp${controller.formatter.format(controller.change)}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 20),
                     ),
                   ],
                 ),

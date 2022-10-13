@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sigma_pos/app/data/states/order_state.dart';
 import 'package:sigma_pos/app/modules/order/order_controller.dart';
 import 'package:sigma_pos/app/widget/bottom_navbar.dart';
 import 'package:sigma_pos/app/widget/main_button.dart';
@@ -56,11 +57,11 @@ class OrderPage extends StatelessWidget {
               SizedBox(
                 height: height * 3 / 5,
                 child: Obx(
-                  () => (controller.listProduct.isNotEmpty)
+                  () => (OrderState.order.isNotEmpty)
                       ? ListView.builder(
-                          itemCount: controller.listProduct.length,
+                          itemCount: OrderState.order.length,
                           itemBuilder: (context, index) {
-                            final product = controller.listProduct[index];
+                            final product = OrderState.order[index];
                             return Container(
                               margin: const EdgeInsets.only(bottom: 10),
                               height: height / 5,
@@ -135,7 +136,11 @@ class OrderPage extends StatelessWidget {
                                                       color: Colors
                                                           .white, // Button color
                                                       child: InkWell(
-                                                        onTap: () {},
+                                                        onTap: () {
+                                                          controller
+                                                              .removeProduct(
+                                                                  product);
+                                                        },
                                                         child: const SizedBox(
                                                           width: 25,
                                                           height: 25,
@@ -163,7 +168,10 @@ class OrderPage extends StatelessWidget {
                                                       color: Colors
                                                           .white, // Button color
                                                       child: InkWell(
-                                                        onTap: () {},
+                                                        onTap: () {
+                                                          controller.addProduct(
+                                                              product);
+                                                        },
                                                         child: const SizedBox(
                                                           width: 25,
                                                           height: 25,
@@ -247,20 +255,22 @@ class OrderPage extends StatelessWidget {
               const SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Total',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Rp 0',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                  Obx(
+                    () => Text(
+                      'Rp ${controller.formatter.format(OrderState.total.value)}',
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
@@ -271,7 +281,7 @@ class OrderPage extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return const PaymentDialog();
+                      return PaymentDialog(controller: controller);
                     },
                   );
                 },

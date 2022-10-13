@@ -1,13 +1,13 @@
 class Product {
-  int? id;
+  String? id;
   String? name;
   int? price;
   int? amount;
 
   Product({this.id, this.name, this.price, this.amount});
 
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Product.fromJson(Map<String, dynamic> json, String idDocument) {
+    id = idDocument;
     name = json['name'];
     price = json['price'];
     amount = json['amount'];

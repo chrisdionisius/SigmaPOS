@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sigma_pos/app/data/states/order_state.dart';
 import 'package:sigma_pos/app/modules/order/order_page.dart';
 import 'package:sigma_pos/app/widget/bottom_navbar.dart';
 import 'package:sigma_pos/app/widget/search_textfield.dart';
@@ -73,7 +74,8 @@ class ProductPage extends StatelessWidget {
                                 },
                                 child: Obx(
                                   () => Container(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
                                     margin: const EdgeInsets.only(right: 5),
                                     decoration: BoxDecoration(
                                       color:
@@ -119,7 +121,11 @@ class ProductPage extends StatelessWidget {
               SizedBox(
                 height: height * 16 / 30,
                 child: Obx(
-                  () => (controller.listCategory.isNotEmpty)
+                  () => (controller.listCategory.isNotEmpty &&
+                          controller
+                              .listCategory[controller.selectedCategory.value]
+                              .products!
+                              .isNotEmpty)
                       ? ListView.builder(
                           itemCount: controller
                               .listCategory[controller.selectedCategory.value]
@@ -167,57 +173,90 @@ class ProductPage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 20),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ClipOval(
-                                          child: Material(
-                                            color: Colors.white, // Button color
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: const SizedBox(
-                                                width: 25,
-                                                height: 25,
-                                                child: Icon(Icons.remove),
+                                  Obx(
+                                    () => Container(
+                                      margin: const EdgeInsets.only(right: 20),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            (OrderState.order.contains(product))
+                                                ? Colors.black
+                                                : const Color.fromRGBO(
+                                                    217, 217, 217, 1),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Obx(
+                                        () => Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            (OrderState.order.contains(product))
+                                                ? ClipOval(
+                                                    child: Material(
+                                                      color: Colors
+                                                          .white, // Button color
+                                                      child: InkWell(
+                                                        onTap: () => controller
+                                                            .removeProduct(
+                                                                product),
+                                                        child: const SizedBox(
+                                                          width: 25,
+                                                          height: 25,
+                                                          child: Icon(
+                                                              Icons.remove),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    width: 25,
+                                                  ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
+                                              child: Obx(
+                                                () => Text(
+                                                  (OrderState.order
+                                                          .contains(product))
+                                                      ? OrderState.order
+                                                          .where((element) =>
+                                                              element.id ==
+                                                              product.id)
+                                                          .first
+                                                          .amount
+                                                          .toString()
+                                                      : '0',
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 15),
-                                          child: Text(
-                                            '0',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        ClipOval(
-                                          child: Material(
-                                            color: Colors.white, // Button color
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: const SizedBox(
-                                                width: 25,
-                                                height: 25,
-                                                child: Icon(Icons.add),
+                                            ClipOval(
+                                              child: Material(
+                                                color: Colors
+                                                    .white, // Button color
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    controller
+                                                        .addProduct(product);
+                                                  },
+                                                  child: const SizedBox(
+                                                    width: 25,
+                                                    height: 25,
+                                                    child: Icon(Icons.add),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   )
                                 ],
@@ -225,24 +264,16 @@ class ProductPage extends StatelessWidget {
                             );
                           },
                         )
-                      : ListView.builder(
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.all(5),
-                              height: height * 3 / 10,
-                              width: height * 3 / 10,
-                              child: const Text('ppp'),
-                            );
-                          },
-                        ),
+                      : const Text('Empty Data'),
                 ),
               ),
-              TotalOrderButton(
-                label: 'TOTAL',
-                total: 0,
-                onPressed: () => Get.to(
-                  () => const OrderPage(),
+              Obx(
+                () => TotalOrderButton(
+                  label: 'TOTAL',
+                  total: OrderState.total.value,
+                  onPressed: () => Get.to(
+                    () => const OrderPage(),
+                  ),
                 ),
               ),
             ],

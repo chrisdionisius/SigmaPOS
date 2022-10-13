@@ -1,19 +1,19 @@
 import 'product.dart';
 
 class Category {
-  int? id;
+  String? id;
   String? name;
   List<Product>? products;
 
   Category({this.id, this.name, this.products});
 
-  Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Category.fromJson(Map<String, dynamic> json, String idDocument) {
+    id = idDocument;
     name = json['name'];
     if (json['products'] != null) {
       products = <Product>[];
       json['products'].forEach((v) {
-        products!.add(Product.fromJson(v));
+        products!.add(Product.fromJson(v, 'a'));
       });
     }
   }

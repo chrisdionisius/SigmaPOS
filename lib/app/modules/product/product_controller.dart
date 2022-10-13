@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sigma_pos/app/data/models/category.dart';
 
+import '../../data/models/product.dart';
 import '../../data/models/store.dart';
+import '../../data/services/firestore_service.dart';
+import '../../data/states/order_state.dart';
 
 class ProductController extends GetxController {
   TextEditingController searchController = TextEditingController();
@@ -20,9 +20,20 @@ class ProductController extends GetxController {
   }
 
   void fetchProducts() async {
-    final String dummyData =
-        await rootBundle.loadString('assets/json/store.json');
-    Store store = Store.fromJson(jsonDecode(dummyData));
-    listCategory.value = store.categories!;
+    Store store = await readStore();
+    listCategory.value = await readCategoriesAndProducts(store.id!);
+    // await readStore();
+    // final String dummyData =
+    //     await rootBundle.loadString('assets/json/store.json');
+    // Store store = Store.fromJson(jsonDecode(dummyData), 'aa');
+    // listCategory.value = store.categories!;
+  }
+
+  void addProduct(Product product) {
+    OrderState.addProduct(product);
+  }
+
+  void removeProduct(Product product) {
+    OrderState.removeProduct(product);
   }
 }
