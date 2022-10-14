@@ -94,6 +94,7 @@ class PaymentDialog extends StatelessWidget {
             onTap: () {
               if (controller.isValid()) {
                 Get.back();
+                controller.sendData();
                 Get.dialog(PaymentNotificationDialog(controller: controller));
               } else {
                 Get.snackbar("Error", "Please fill all the field");

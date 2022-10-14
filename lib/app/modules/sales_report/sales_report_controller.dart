@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/order.dart';
+import '../../data/services/firestore_service.dart';
 
 class SalesReportController extends GetxController {
   RxList<Order> listOrders = <Order>[].obs;
@@ -25,13 +23,16 @@ class SalesReportController extends GetxController {
   }
 
   void fetchSalesReport() async {
-    final String dummyData =
-        await rootBundle.loadString('assets/json/sales.json');
-    listOrders.value = (json.decode(dummyData) as List)
-        .map((e) => Order.fromJson(e, '3dfs'))
-        .toList();
-    totalSales.value = listOrders
-        .map((e) => e.total)
-        .reduce((value, element) => value! + element!)!;
+    listOrders.value = await getOrders();
+    totalSales.value = listOrders.fold(
+        0, (previousValue, element) => previousValue + element.total!);
+    // final String dummyData =
+    //     await rootBundle.loadString('assets/json/sales.json');
+    // listOrders.value = (json.decode(dummyData) as List)
+    //     .map((e) => Order.fromJson(e, '3dfs'))
+    //     .toList();
+    // totalSales.value = listOrders
+    //     .map((e) => e.total)
+    //     .reduce((value, element) => value! + element!)!;
   }
 }

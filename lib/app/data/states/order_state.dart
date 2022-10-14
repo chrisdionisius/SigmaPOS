@@ -33,6 +33,8 @@ class OrderState {
 
   static void clearOrder() {
     order.clear();
+    total.value = 0;
+    change.value = 0;
   }
 
   static addTotal(Product product) {

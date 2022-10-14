@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sigma_pos/app/data/models/product.dart';
+import 'package:sigma_pos/app/data/services/firestore_service.dart';
 
+import '../../data/models/order.dart';
 import '../../data/states/order_state.dart';
 
 class OrderController extends GetxController {
@@ -12,6 +14,8 @@ class OrderController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController paymentController = TextEditingController();
   int change = 0;
+
+  Order order = Order();
 
   OrderController() {
     // fetchOrder();
@@ -42,5 +46,17 @@ class OrderController extends GetxController {
       return true;
     }
     return false;
+  }
+
+  void sendData() async {
+    order.customer = nameController.text;
+    order.products = OrderState.order;
+    order.bayar = int.parse(paymentController.text);
+    order.date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    order.time = DateFormat('HH:mm:ss').format(DateTime.now());
+    order.discount = 0;
+    order.total = OrderState.total.value;
+    await sendOrder(order);
+    OrderState.clearOrder();
   }
 }

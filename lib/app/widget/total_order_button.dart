@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TotalOrderButton extends StatelessWidget {
   final String label;
@@ -11,6 +12,8 @@ class TotalOrderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = NumberFormat("#,##0", "en_US");
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -29,7 +32,8 @@ class TotalOrderButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label, style: const TextStyle(fontSize: 15)),
-            Text('Rp $total', style: const TextStyle(fontSize: 15)),
+            Text('Rp ${formatter.format(total)}',
+                style: const TextStyle(fontSize: 15)),
           ],
         ),
       ),

@@ -223,16 +223,8 @@ class OrderPage extends StatelessWidget {
                             );
                           },
                         )
-                      : ListView.builder(
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: const EdgeInsets.all(5),
-                              height: height * 3 / 10,
-                              width: height * 3 / 10,
-                              child: const Text('ppp'),
-                            );
-                          },
+                      : const Center(
+                          child: Text('Empty Order'),
                         ),
                 ),
               ),

@@ -264,7 +264,12 @@ class ProductPage extends StatelessWidget {
                             );
                           },
                         )
-                      : const Text('Empty Data'),
+                      : const Center(
+                          child: Text(
+                            'No Product',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                 ),
               ),
               Obx(

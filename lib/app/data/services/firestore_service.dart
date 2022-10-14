@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sigma_pos/app/data/models/order.dart';
 
 import '../models/category.dart';
 import '../models/product.dart';
@@ -93,52 +94,53 @@ Future<List<Category>> readCategoriesAndProducts(String id) async {
   return categoriesList;
 }
 
-// Future<List<Product>> getProductsByKategori(String kategori) async {
-//     await Firebase.initializeApp();
-//     final Query productsQuery = FirebaseFirestore.instance
-//         .collection('products')
-//         .where('kategori', isEqualTo: kategori);
-//     List<Product> productsList = [];
-//     await productsQuery.get().then((querySnapshot) {
-//       for (var result in querySnapshot.docs) {
-//         var encodedResult = jsonEncode(result.data());
-//         print(encodedResult);
-//         productsList.add(
-//           Product.fromJson(jsonDecode(encodedResult), result.id),
-//         );
-//       }
-//     });
-//     return productsList;
-//   }
+//send data order to firestore
+Future<void> sendOrder(Order order) async {
+  //get store id
+  final Store store = await readStore();
+  //send order
+  await FirebaseFirestore.instance
+      .collection('stores/${store.id}/orders')
+      .add(order.toJson());
+}
 
+//read orders
+Future<List<Order>> getOrders() async {
+  //get store id
+  final Store store = await readStore();
+  //read orders
+  Query ordersQuery = FirebaseFirestore.instance
+      .collection("stores/${store.id}/orders")
+      .orderBy('date', descending: true);
+  QuerySnapshot ordersQuerySnapshot = await ordersQuery.get();
+  List<Order> ordersList = [];
+  for (var document in ordersQuerySnapshot.docs) {
+    ordersList.add(
+      Order.fromJson(jsonDecode(jsonEncode(document.data())), document.id),
+    );
+  }
+  return ordersList;
+}
 
-// Future<List<Category>> readCategoriesFromStore() async {
-//   final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-//       .collection('stores')
-//       .where('user_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-//       .get()
-//       .then((value) => value.docs.first);
-//   print(documentSnapshot);
-//   return Store.fromJson(
-//           jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id)
-//       .categories;
-// }
+// get order today
+Future<List<Order>> getOrdersToday() async {
+  //get store id
+  final Store store = await readStore();
+  //read orders
+  Query ordersQuery = FirebaseFirestore.instance
+      .collection("stores/${store.id}/orders")
+      .where('date', isGreaterThanOrEqualTo: DateTime.now().toString())
+      .orderBy('date', descending: true);
+  QuerySnapshot ordersQuerySnapshot = await ordersQuery.get();
+  List<Order> ordersList = [];
+  for (var document in ordersQuerySnapshot.docs) {
+    ordersList.add(
+      Order.fromJson(jsonDecode(jsonEncode(document.data())), document.id),
+    );
+  }
+  return ordersList;
+}
 
-// final CollectionReference ownStoreCollections =
-//     FirebaseFirestore.instance.collection('stores');
-
-// Future<List<Category>> getOwnStore(String uid) async {
-  // await ownStoreCollections
-  //     .where('user_uid', isEqualTo: uid)
-  //     .get()
-  //     .then((querySnapshot) {
-    // for (var result in querySnapshot.docs) {
-    //   var encodedResult = jsonEncode(result.data());
-    //   threadsList.add(Store.fromJson(jsonDecode(encodedResult), result.id));
-    // }
-  // });
-  // return threadsList;
-// }
 
 // final FirebaseAuth _auth = FirebaseAuth.instance;
 // String? name;
