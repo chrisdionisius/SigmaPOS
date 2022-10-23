@@ -29,6 +29,15 @@ class ProductController extends GetxController {
     // listCategory.value = store.categories!;
   }
 
+  Future<bool> fetchStore() async {
+    Store store = await readStore();
+    if (store.id == null) {
+      return false;
+    }
+    listCategory.value = await readCategoriesAndProducts(store.id!);
+    return true;
+  }
+
   void addProduct(Product product) {
     OrderState.addProduct(product);
   }

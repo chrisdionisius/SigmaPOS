@@ -55,13 +55,17 @@ Future getCurrentUser() async {
 }
 
 Future<Store> readStore() async {
-  final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-      .collection('stores')
-      .where('user_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-      .get()
-      .then((value) => value.docs.first);
-  return Store.fromJson(
-      jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
+  try {
+    final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('stores')
+        .where('user_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) => value.docs.first);
+    return Store.fromJson(
+        jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
+  } catch (e) {
+    return Store();
+  }
 }
 
 //read categories and product

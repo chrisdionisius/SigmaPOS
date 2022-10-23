@@ -37,10 +37,12 @@ class LoginPage extends StatelessWidget {
                 label: 'Login',
                 onPressed: () => controller.signIn(),
               ),
-              // const SizedBox(height: 10),
-              // MainButton(
-              //   label: 'Daftar',
-              //   onPressed: () {},
+              // InkWell(
+              //   onTap: (() {}),
+              //   child: Container(
+              //     color: Colors.amber,
+              //     child: const Text('Sign Up'),
+              //   ),
               // ),
             ],
           ),

@@ -6,6 +6,7 @@ import 'package:sigma_pos/app/widget/bottom_navbar.dart';
 import 'package:sigma_pos/app/widget/search_textfield.dart';
 import 'package:sigma_pos/app/widget/total_order_button.dart';
 
+import '../../data/services/firestore_service.dart';
 import 'product_controller.dart';
 
 class ProductPage extends StatelessWidget {
@@ -17,6 +18,30 @@ class ProductPage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     ProductController controller = Get.put(ProductController());
     return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: height * 0.2,
+              width: width,
+              child: Center(
+                child: Image.asset(
+                  'assets/images/sigma.png',
+                  width: width * 0.5,
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text('Logout'),
+              leading: const Icon(Icons.logout),
+              onTap: () async {
+                await signOut();
+              },
+            ),
+          ],
+        ),
+      ),
       backgroundColor: const Color.fromRGBO(250, 250, 250, 1),
       appBar: AppBar(
         elevation: 0,
@@ -103,13 +128,13 @@ class ProductPage extends StatelessWidget {
                           })
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 2,
+                          itemCount: 1,
                           itemBuilder: (context, index) {
                             return Container(
                               margin: const EdgeInsets.all(5),
                               height: height * 3 / 10,
                               width: height * 3 / 10,
-                              child: const Text('ppp'),
+                              child: const Text('Category is empty'),
                             );
                           },
                         ),

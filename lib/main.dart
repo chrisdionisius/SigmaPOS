@@ -5,6 +5,10 @@ import 'package:get/get.dart';
 import 'package:sigma_pos/app/modules/login/login_page.dart';
 import 'package:sigma_pos/app/modules/product/product_page.dart';
 
+import 'app/data/models/store.dart';
+import 'app/data/services/firestore_service.dart';
+import 'app/modules/sales_report/sales_report_page.dart';
+
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -27,7 +31,12 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
+            // lek ditambahi async ga gelem
             if (snapshot.hasData) {
+              // Store store = await readStore(); // await e error
+              // if (store.id == null) {
+              //   return const SalesReportPage();
+              // }
               return const ProductPage();
             } else {
               return const LoginPage();
