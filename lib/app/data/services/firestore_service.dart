@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sigma_pos/app/data/models/order.dart';
+import 'package:sigma_pos/app/data/states/register_state.dart';
 
 import '../models/category.dart';
 import '../models/product.dart';
@@ -18,22 +19,23 @@ Future signInWithEmail(email, password) async {
   }
 }
 
-Future signUpWithEmail(email, password) async {
+Future<String> signUpWithEmail(email, password) async {
   try {
-    await FirebaseAuth.instance
+    UserCredential result = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
+    await addUser(result.user!.uid);
     return 'success';
   } catch (e) {
-    return e;
+    return 'failed';
   }
 }
 
-Future signOut() async {
+Future<String> signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
     return 'success';
   } catch (e) {
-    return e;
+    return 'failed';
   }
 }
 
@@ -143,6 +145,51 @@ Future<List<Order>> getOrdersToday() async {
     );
   }
   return ordersList;
+}
+
+Future<String> checkAvailableEmail(String email) async {
+  try {
+    List<String> userAvail =
+        await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    if (userAvail.isEmpty) {
+      return 'success';
+    } else {
+      return 'not available';
+    }
+  } catch (e) {
+    return 'failed';
+  }
+}
+
+Future<String> checkRegisterCode(String code) async {
+  try {
+    final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('stores')
+        .where('register_code', isEqualTo: code)
+        .get()
+        .then((value) => value.docs.first);
+    if (documentSnapshot.exists) {
+      RegisterState.store.value = Store.fromJson(
+          jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
+      return 'success';
+    } else {
+      return 'failed';
+    }
+  } catch (e) {
+    return 'failed';
+  }
+}
+
+Future<String> addUser(String uid) async {
+  try {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'role': 'recruit',
+      'store_id': RegisterState.store.value.id,
+    });
+    return 'success';
+  } catch (e) {
+    return 'failed';
+  }
 }
 
 

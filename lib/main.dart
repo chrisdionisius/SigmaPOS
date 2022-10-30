@@ -1,14 +1,13 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sigma_pos/app/modules/login/login_page.dart';
 import 'package:sigma_pos/app/modules/product/product_page.dart';
-
-import 'app/data/models/store.dart';
-import 'app/data/services/firestore_service.dart';
-import 'app/modules/sales_report/sales_report_page.dart';
-
+import 'app/modules/register/register_success_page.dart';
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -31,13 +30,35 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            // lek ditambahi async ga gelem
             if (snapshot.hasData) {
-              // Store store = await readStore(); // await e error
-              // if (store.id == null) {
-              //   return const SalesReportPage();
-              // }
-              return const ProductPage();
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(snapshot.data!.uid)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                  if (userSnapshot.hasData &&
+                      userSnapshot.data!.data() != null) {
+                    final userDoc = userSnapshot.data;
+                    final user = userDoc!.data();
+                    var data = jsonDecode(jsonEncode(user));
+                    if (data['role'] == 'owner') {
+                      return const ProductPage();
+                    } else if (data['role'] == 'cashier') {
+                      return const ProductPage();
+                    } else {
+                      return const RegisterSuccessPage(role: 'cashier');
+                    }
+                  } else {
+                    return const Material(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              );
             } else {
               return const LoginPage();
             }

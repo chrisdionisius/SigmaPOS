@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
   final String label;
-  final Function()? onPressed;
+  final Function() onPressed;
 
-  const MainButton({Key? key, required this.label, this.onPressed})
+  const MainButton({Key? key, required this.label, required this.onPressed})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class MainButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        onPressed!();
+        onPressed();
       },
       child: Text(
         label,

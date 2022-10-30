@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
-class PasswordTextfield extends StatelessWidget {
+class PasswordTextfield extends StatefulWidget {
   final String? hint;
-  final TextEditingController controller;
-  final bool isHidden;
-  final Function() onPressed;
+  final TextEditingController? controller;
 
-  const PasswordTextfield(
-      {Key? key,
-      required this.controller,
-      this.hint,
-      required this.isHidden,
-      required this.onPressed})
-      : super(key: key);
+  const PasswordTextfield({
+    Key? key,
+    this.controller,
+    this.hint,
+  }) : super(key: key);
 
+  @override
+  State<PasswordTextfield> createState() => _PasswordTextfieldState();
+}
+
+class _PasswordTextfieldState extends State<PasswordTextfield> {
+  bool isHidden = true;
   @override
   Widget build(BuildContext context) {
     return TextField(
       cursorHeight: 20,
-      controller: controller,
+      controller: widget.controller,
       obscureText: isHidden,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
@@ -27,7 +29,9 @@ class PasswordTextfield extends StatelessWidget {
                 ? const Icon(Icons.visibility)
                 : const Icon(Icons.visibility_off),
             onPressed: () {
-              onPressed();
+              setState(() {
+                isHidden = !isHidden;
+              });
             },
           ),
           border: OutlineInputBorder(
@@ -39,7 +43,7 @@ class PasswordTextfield extends StatelessWidget {
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
-          hintText: "Password",
+          hintText: (widget.hint) ?? 'Password',
           fillColor: Colors.white70),
     );
   }

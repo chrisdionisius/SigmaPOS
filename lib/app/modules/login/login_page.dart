@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sigma_pos/app/modules/login/login_controller.dart';
+import 'package:sigma_pos/app/modules/register/register_page.dart';
 import 'package:sigma_pos/app/widget/main_textfield.dart';
 import 'package:sigma_pos/app/widget/password_textfield.dart';
 
@@ -23,27 +24,28 @@ class LoginPage extends StatelessWidget {
               MainTextField(
                   controller: controller.usernameController, hint: 'Username'),
               const SizedBox(height: 20),
-              Obx(
-                () => PasswordTextfield(
-                  controller: controller.passwordController,
-                  isHidden: controller.isHidden.value,
-                  onPressed: () {
-                    controller.isHidden.value = !controller.isHidden.value;
-                  },
-                ),
+              PasswordTextfield(
+                controller: controller.passwordController,
               ),
               const SizedBox(height: 20),
               MainButton(
                 label: 'Login',
                 onPressed: () => controller.signIn(),
               ),
-              // InkWell(
-              //   onTap: (() {}),
-              //   child: Container(
-              //     color: Colors.amber,
-              //     child: const Text('Sign Up'),
-              //   ),
-              // ),
+              InkWell(
+                onTap: (() {
+                  Get.to(
+                    () => const RegisterPage(),
+                  );
+                }),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: const Text(
+                    'Sign Up',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
