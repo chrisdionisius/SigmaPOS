@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
                     } else if (data['role'] == 'cashier') {
                       return const ProductPage();
                     } else {
-                      return const RegisterSuccessPage(role: 'cashier');
+                      return const RegisterSuccessPage(role: 'recruit');
                     }
                   } else {
                     return const Material(

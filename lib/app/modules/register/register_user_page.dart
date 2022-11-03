@@ -42,8 +42,10 @@ class RegisterUserPage extends StatelessWidget {
                     const SizedBox(height: 20),
                     MainButton(
                       label: 'REGISTERs',
-                      onPressed: () async {
-                        await controller.registerUser(role);
+                      onPressed: () {
+                        controller.checkInput()
+                            ? controller.registerUser(role)
+                            : null;
                       },
                     ),
                   ],

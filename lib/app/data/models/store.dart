@@ -3,15 +3,18 @@ import 'category.dart';
 class Store {
   String? id;
   String? name;
-  String? userUid;
+  String? ownerUid;
+  String? registerCode;
   List<Category>? categories;
 
-  Store({this.id, this.name, this.userUid, this.categories});
+  Store(
+      {this.id, this.name, this.ownerUid, this.registerCode, this.categories});
 
   Store.fromJson(Map<String, dynamic> json, String storeId) {
     id = storeId;
     name = json['name'];
-    userUid = json['userUid'];
+    ownerUid = json['owner_uid'];
+    registerCode = json['register_code'];
     if (json['categories'] != null) {
       categories = <Category>[];
       json['categories'].forEach((v) {
@@ -22,9 +25,10 @@ class Store {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    // data['id'] = id;
     data['name'] = name;
-    data['userUid'] = userUid;
+    data['owner_uid'] = ownerUid;
+    data['register_code'] = registerCode;
     if (categories != null) {
       data['categories'] = categories!.map((v) => v.toJson()).toList();
     }

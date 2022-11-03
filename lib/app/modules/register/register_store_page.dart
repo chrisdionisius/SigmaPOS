@@ -4,12 +4,15 @@ import 'package:sigma_pos/app/modules/register/register_success_page.dart';
 import 'package:sigma_pos/app/widget/main_button.dart';
 
 import '../../widget/main_textfield.dart';
+import 'register_controller.dart';
 
 class RegisterStorePage extends StatelessWidget {
   const RegisterStorePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    RegisterController controller = Get.put(RegisterController());
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -23,13 +26,20 @@ class RegisterStorePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const MainTextField(hint: 'Store Name'),
+                    MainTextField(
+                      hint: 'Store Name',
+                      controller: controller.storeNameController,
+                    ),
                     const SizedBox(height: 20),
                     MainButton(
                       label: 'REGISTER',
-                      onPressed: () => Get.off(
-                          () => const RegisterSuccessPage(role: 'owner'),
-                          transition: Transition.rightToLeftWithFade),
+                      onPressed: () async {
+                        if (await controller.registerStore() == 'success') {
+                          Get.off(
+                              () => const RegisterSuccessPage(role: 'owner'),
+                              transition: Transition.rightToLeftWithFade);
+                        }
+                      },
                     ),
                   ],
                 ),

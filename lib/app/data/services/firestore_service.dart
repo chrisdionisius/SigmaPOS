@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sigma_pos/app/data/models/order.dart';
-import 'package:sigma_pos/app/data/states/register_state.dart';
 
 import '../models/category.dart';
 import '../models/product.dart';
@@ -19,12 +18,11 @@ Future signInWithEmail(email, password) async {
   }
 }
 
-Future<String> signUpWithEmail(email, password) async {
+Future<String> signUpWithEmail(String email, String password) async {
   try {
     UserCredential result = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
-    await addUser(result.user!.uid);
-    return 'success';
+    return result.user!.uid;
   } catch (e) {
     return 'failed';
   }
@@ -56,13 +54,30 @@ Future getCurrentUser() async {
   }
 }
 
+Future<String> getUserStore() async {
+  try {
+    final user = await getCurrentUser();
+    final store = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
+    return store.data()!['store_uid'];
+  } catch (e) {
+    return 'failed';
+  }
+}
+
 Future<Store> readStore() async {
   try {
+    // final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+    //     .collection('stores')
+    //     .where('owner_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    //     .get()
+    //     .then((value) => value.docs.first);
     final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('stores')
-        .where('user_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) => value.docs.first);
+        .doc(await getUserStore())
+        .get();
     return Store.fromJson(
         jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
   } catch (e) {
@@ -147,21 +162,21 @@ Future<List<Order>> getOrdersToday() async {
   return ordersList;
 }
 
-Future<String> checkAvailableEmail(String email) async {
+Future<bool> emailRegistered(String email) async {
   try {
     List<String> userAvail =
         await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (userAvail.isEmpty) {
-      return 'success';
+      return false;
     } else {
-      return 'not available';
+      return true;
     }
   } catch (e) {
-    return 'failed';
+    return true;
   }
 }
 
-Future<String> checkRegisterCode(String code) async {
+Future<Store> checkRegisterCode(String code) async {
   try {
     final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('stores')
@@ -169,24 +184,36 @@ Future<String> checkRegisterCode(String code) async {
         .get()
         .then((value) => value.docs.first);
     if (documentSnapshot.exists) {
-      RegisterState.store.value = Store.fromJson(
+      return Store.fromJson(
           jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
-      return 'success';
     } else {
-      return 'failed';
+      return Store();
     }
   } catch (e) {
-    return 'failed';
+    return Store();
   }
 }
 
-Future<String> addUser(String uid) async {
+Future<bool> addUser(String userUid, String storeUid, String role) async {
   try {
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'role': 'recruit',
-      'store_id': RegisterState.store.value.id,
+    await FirebaseFirestore.instance.collection('users').doc(userUid).set({
+      'role': role,
+      'store_uid': storeUid,
     });
-    return 'success';
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+Future<String> addStore(Store store) async {
+  String storeUid = '';
+  try {
+    await FirebaseFirestore.instance
+        .collection('stores')
+        .add(store.toJson())
+        .then((value) => storeUid = value.id);
+    return storeUid;
   } catch (e) {
     return 'failed';
   }
