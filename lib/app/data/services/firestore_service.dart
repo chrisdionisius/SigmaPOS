@@ -123,6 +123,33 @@ Future<List<Category>> readCategoriesAndProducts(String id) async {
   return categoriesList;
 }
 
+Future<Category> readCategory(String categoryId) async {
+  try {
+    final Store store = await readStore();
+    var documentSnapshot = await FirebaseFirestore.instance
+        .collection('stores/${store.id}/categories')
+        .doc(categoryId)
+        .get();
+    List<Product> productsList = [];
+    Query productsQuery = FirebaseFirestore.instance
+        .collection("stores/${store.id}/categories/$categoryId/products")
+        .orderBy('name');
+    QuerySnapshot productsQuerySnapshot = await productsQuery.get();
+    for (var productDocument in productsQuerySnapshot.docs) {
+      productsList.add(
+        Product.fromJson(
+            jsonDecode(jsonEncode(productDocument.data())), productDocument.id),
+      );
+    }
+    Category category =
+        Category.fromJson(documentSnapshot.data()!, documentSnapshot.id);
+    category.products = productsList;
+    return category;
+  } catch (e) {
+    return Category();
+  }
+}
+
 Future<void> sendOrder(Order order) async {
   //get store id
   final Store store = await readStore();
