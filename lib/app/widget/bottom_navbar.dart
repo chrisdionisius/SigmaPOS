@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:sigma_pos/app/modules/order/order_page.dart';
 import 'package:sigma_pos/app/modules/product/product_page.dart';
 import 'package:sigma_pos/app/modules/sales_report/sales_report_page.dart';
+import 'package:sigma_pos/app/modules/setting/setting_page.dart';
 
-class CustomBottomNavbar extends StatelessWidget {
-  const CustomBottomNavbar({Key? key, required this.choosenIndex})
+class UserBottomNavbar extends StatelessWidget {
+  const UserBottomNavbar({Key? key, required this.choosenIndex})
       : super(key: key);
   final int choosenIndex;
 
@@ -36,6 +37,9 @@ class CustomBottomNavbar extends StatelessWidget {
                 break;
               case 2:
                 Get.to(() => const SalesReportPage());
+                break;
+              case 3:
+                Get.to(() => const SettingPage());
                 break;
               default:
                 Get.to(() => const ProductPage());

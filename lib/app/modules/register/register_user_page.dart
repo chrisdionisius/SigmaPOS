@@ -15,8 +15,9 @@ class RegisterUserPage extends StatelessWidget {
     RegisterController controller = Get.put(RegisterController());
     return Scaffold(
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          shrinkWrap: true,
           children: [
             Image.asset('assets/images/sigma.png'),
             Expanded(
@@ -26,6 +27,11 @@ class RegisterUserPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    MainTextField(
+                      hint: 'Nama',
+                      controller: controller.nameController,
+                    ),
+                    const SizedBox(height: 20),
                     MainTextField(
                       hint: 'Email',
                       controller: controller.emailController,
@@ -41,7 +47,7 @@ class RegisterUserPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     MainButton(
-                      label: 'REGISTERs',
+                      label: 'REGISTER',
                       onPressed: () {
                         controller.checkInput()
                             ? controller.registerUser(role)

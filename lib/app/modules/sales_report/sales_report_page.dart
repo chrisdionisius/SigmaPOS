@@ -93,7 +93,7 @@ class SalesReportPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavbar(
+      bottomNavigationBar: const UserBottomNavbar(
         choosenIndex: 2,
       ),
     );

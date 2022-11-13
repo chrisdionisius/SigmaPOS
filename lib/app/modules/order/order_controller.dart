@@ -52,7 +52,7 @@ class OrderController extends GetxController {
     order.customer = nameController.text;
     order.products = OrderState.order;
     order.bayar = int.parse(paymentController.text);
-    order.date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    order.date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     order.time = DateFormat('HH:mm:ss').format(DateTime.now());
     order.discount = 0;
     order.total = OrderState.total.value;

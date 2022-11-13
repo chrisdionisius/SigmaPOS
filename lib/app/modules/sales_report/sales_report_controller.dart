@@ -8,6 +8,8 @@ import '../../data/services/firestore_service.dart';
 class SalesReportController extends GetxController {
   RxList<Order> listOrders = <Order>[].obs;
   final formatter = NumberFormat("#,##0", "en_US");
+  final formatterDate = DateFormat('yyyy-MM-dd HH:mm:ss');
+  final formatterDateRead = DateFormat('dd-MMMM-yyyy HH:mm:ss');
   TextEditingController searchController = TextEditingController();
   List<String> listFilter = [
     'Today',

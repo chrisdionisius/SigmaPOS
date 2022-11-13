@@ -287,7 +287,7 @@ class ProductPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavbar(
+      bottomNavigationBar: const UserBottomNavbar(
         choosenIndex: 0,
       ),
     );

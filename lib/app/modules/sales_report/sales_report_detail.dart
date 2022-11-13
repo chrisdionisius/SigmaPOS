@@ -14,6 +14,8 @@ class SalesReportDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat("#,##0", "en_US");
+    final formatterDate = DateFormat('yyyy-MM-dd HH:mm:ss');
+    final formatterDateRead = DateFormat('dd MMMM yyyy - HH:mm:ss');
 
     return Scaffold(
       appBar: AppBar(
@@ -58,8 +60,14 @@ class SalesReportDetail extends StatelessWidget {
               order.id!,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 5),
             Text(order.customer!),
-            Text(order.date!),
+            const SizedBox(height: 5),
+            Text(
+              formatterDateRead.format(
+                formatterDate.parse(order.date!),
+              ),
+            ),
             const SizedBox(height: 20),
             Column(
               children: [
@@ -113,7 +121,7 @@ class SalesReportDetail extends StatelessWidget {
         icon: const Icon(Icons.print),
         backgroundColor: Colors.black,
       ),
-      bottomNavigationBar: const CustomBottomNavbar(
+      bottomNavigationBar: const UserBottomNavbar(
         choosenIndex: 2,
       ),
     );

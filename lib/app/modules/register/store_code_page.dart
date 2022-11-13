@@ -25,7 +25,7 @@ class StoreCodePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     MainTextField(
-                      hint: 'Store Codess',
+                      hint: 'Store Codes',
                       controller: controller.storeCodeController,
                     ),
                     const SizedBox(height: 20),

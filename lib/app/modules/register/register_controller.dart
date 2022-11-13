@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sigma_pos/app/data/models/account.dart';
 import 'package:sigma_pos/app/data/models/store.dart';
 import 'package:sigma_pos/app/modules/register/register_store_page.dart';
 import 'package:sigma_pos/app/modules/register/register_success_page.dart';
@@ -13,6 +14,7 @@ import '../../data/states/register_state.dart';
 class RegisterController extends GetxController {
   TextEditingController storeCodeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController storeNameController = TextEditingController();
@@ -42,7 +44,11 @@ class RegisterController extends GetxController {
     if (role == 'recruit') {
       String userUid =
           await signUpWithEmail(emailController.text, passwordController.text);
-      if (await addUser(userUid, RegisterState.store.value.id!, role)) {
+      Account account = Account(
+          name: emailController.text,
+          role: role,
+          storeUid: RegisterState.store.value.id);
+      if (await addAccount(userUid, account)) {
         Get.to(() => const RegisterSuccessPage(role: 'recruit'),
             transition: Transition.rightToLeftWithFade);
       } else {
@@ -90,8 +96,14 @@ class RegisterController extends GetxController {
     //add store ke firestore
     String storeUid = await addStore(RegisterState.store.value);
 
+    Account account = Account(
+      name: "user",
+      role: 'owner',
+      storeUid: storeUid,
+    );
+
     //add user ke firestore
-    await addUser(userUid, storeUid, 'owner');
+    await addAccount(userUid, account);
 
     return 'success';
   }

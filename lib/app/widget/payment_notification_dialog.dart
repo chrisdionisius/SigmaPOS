@@ -95,7 +95,7 @@ class PaymentNotificationDialog extends StatelessWidget {
           InkWell(
             onTap: () {
               Get.offAll(
-                const ProductPage(),
+                () => const ProductPage(),
               );
             },
             child: Container(

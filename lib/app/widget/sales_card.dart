@@ -25,7 +25,7 @@ class SalesCard extends StatelessWidget {
       ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
-        height: height / 7,
+        height: height / 6,
         width: width,
         decoration: BoxDecoration(
           color: Colors.white,

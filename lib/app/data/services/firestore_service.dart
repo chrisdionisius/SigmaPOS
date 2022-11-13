@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sigma_pos/app/data/models/account.dart';
 import 'package:sigma_pos/app/data/models/order.dart';
 
 import '../models/category.dart';
@@ -54,11 +55,24 @@ Future getCurrentUser() async {
   }
 }
 
-Future<String> getUserStore() async {
+Future getCurrentAccount() async {
+  try {
+    var user = await getCurrentUser();
+    var account = await FirebaseFirestore.instance
+        .collection('accounts')
+        .doc(user!.uid)
+        .get();
+    return Account.fromJson(account.data()!, account.id);
+  } catch (e) {
+    return e;
+  }
+}
+
+Future<String> getAccountStore() async {
   try {
     final user = await getCurrentUser();
     final store = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('accounts')
         .doc(user!.uid)
         .get();
     return store.data()!['store_uid'];
@@ -69,14 +83,9 @@ Future<String> getUserStore() async {
 
 Future<Store> readStore() async {
   try {
-    // final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-    //     .collection('stores')
-    //     .where('owner_uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-    //     .get()
-    //     .then((value) => value.docs.first);
     final DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('stores')
-        .doc(await getUserStore())
+        .doc(await getAccountStore())
         .get();
     return Store.fromJson(
         jsonDecode(jsonEncode(documentSnapshot.data())), documentSnapshot.id);
@@ -85,7 +94,6 @@ Future<Store> readStore() async {
   }
 }
 
-//read categories and product
 Future<List<Category>> readCategoriesAndProducts(String id) async {
   Query categoriesQuery = FirebaseFirestore.instance
       .collection("stores/$id/categories")
@@ -115,7 +123,6 @@ Future<List<Category>> readCategoriesAndProducts(String id) async {
   return categoriesList;
 }
 
-//send data order to firestore
 Future<void> sendOrder(Order order) async {
   //get store id
   final Store store = await readStore();
@@ -125,7 +132,6 @@ Future<void> sendOrder(Order order) async {
       .add(order.toJson());
 }
 
-//read orders
 Future<List<Order>> getOrders() async {
   //get store id
   final Store store = await readStore();
@@ -143,7 +149,6 @@ Future<List<Order>> getOrders() async {
   return ordersList;
 }
 
-// get order today
 Future<List<Order>> getOrdersToday() async {
   //get store id
   final Store store = await readStore();
@@ -194,11 +199,12 @@ Future<Store> checkRegisterCode(String code) async {
   }
 }
 
-Future<bool> addUser(String userUid, String storeUid, String role) async {
+Future<bool> addAccount(String userUid, Account account) async {
   try {
-    await FirebaseFirestore.instance.collection('users').doc(userUid).set({
-      'role': role,
-      'store_uid': storeUid,
+    await FirebaseFirestore.instance.collection('accounts').doc(userUid).set({
+      'name': account.name,
+      'role': account.role,
+      'store_uid': account.storeUid,
     });
     return true;
   } catch (e) {
@@ -219,75 +225,59 @@ Future<String> addStore(Store store) async {
   }
 }
 
+Future<List<Account>> fetchStoreCashier() async {
+  try {
+    final Store store = await readStore();
+    var accountsQuerySnapshot = await FirebaseFirestore.instance
+        .collection('accounts')
+        .where('store_uid', isEqualTo: store.id)
+        .where('role', isNotEqualTo: 'owner')
+        .orderBy('role')
+        .get();
+    List<Account> accountsList = [];
+    for (var document in accountsQuerySnapshot.docs) {
+      accountsList.add(
+        Account.fromJson(document.data(), document.id),
+      );
+    }
+    return accountsList;
+  } catch (e) {
+    return [];
+  }
+}
 
-// final FirebaseAuth _auth = FirebaseAuth.instance;
-// String? name;
-// String? email;
+Future<bool> updateAccountRole(String accountUid, String role) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('accounts')
+        .doc(accountUid)
+        .update({'role': role});
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
-// Future<String> signIn(String email, String password) async {
-//   await Firebase.initializeApp();
-//   try {
-//     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-//         email: email, password: password);
-//     final User user = userCredential.user!;
-//     final uid = user.uid;
-//     return '$uid';
-//     // return "Signed in";
-//   } on FirebaseAuthException catch (e) {
-//     if (e.code == 'user-not-found') {
-//       return 'No user found for that email.';
-//     } else if (e.code == 'wrong-password') {
-//       return 'Wrong password provided for that user.';
-//     }
-//     return e.message!;
-//   }
-// }
+Future<bool> addCategory(String name) async {
+  try {
+    final Store store = await readStore();
+    await FirebaseFirestore.instance
+        .collection('stores/${store.id}/categories')
+        .add({'name': name});
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
-// Future<String> signInEmail(String emailInput, String password) async {
-//   await Firebase.initializeApp();
-//   try {
-//     UserCredential userCredential = await FirebaseAuth.instance
-//         .signInWithEmailAndPassword(email: emailInput, password: password);
-
-//     final User? user = userCredential.user;
-
-//     if (user != null) {
-//       assert(user.email != null);
-//       name = null;
-//       email = user.email;
-//       assert(!user.isAnonymous);
-//       assert(await user.getIdToken() != null);
-//       final User currentUser = _auth.currentUser!;
-//       assert(user.uid == currentUser.uid);
-//       // print('signInWithGoogle succeeded: $user');
-//       return '$user';
-//     }
-//   } on FirebaseAuthException catch (e) {
-//     if (e.code == 'user-not-found') {
-//       return 'Failed to sign in with Email & Password: No user found for that email.';
-//     } else if (e.code == 'wrong-password') {
-//       // print('Wrong password provided for that user.');
-//       return 'Failed to sign in with Email & Password: Wrong password provided for that user.';
-//     }
-//   }
-//   return 'Failed to sign in with Email & Password';
-// }
-
-// Future<String> signUpEmail(String emailInput, String password) async {
-//   try {
-//     await FirebaseAuth.instance
-//         .createUserWithEmailAndPassword(email: emailInput, password: password);
-//     return 'done';
-//   } on FirebaseAuthException catch (e) {
-//     if (e.code == 'weak-password') {
-//       // print('The password provided is too weak.');
-//       return 'weak';
-//     } else if (e.code == 'email-already-in-use') {
-//       // print('The account already exists for that email.');
-//       return 'exists';
-//     }
-//   } catch (e) {
-//     return 'error';
-//   }
-//   return 'error';
-// }
+Future<bool> addProduct(Product product, String categoryId) async {
+  try {
+    final Store store = await readStore();
+    await FirebaseFirestore.instance
+        .collection('stores/${store.id}/categories/$categoryId/products')
+        .add(product.toJson());
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
