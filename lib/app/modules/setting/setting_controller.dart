@@ -43,7 +43,7 @@ class SettingController extends GetxController {
     if (AccountState.account.value.role == 'owner') {
       listMenu = ownerMenu;
     } else {
-      listMenu = ownerMenu;
+      listMenu = cashierMenu;
     }
   }
 }

@@ -226,12 +226,13 @@ Future<Store> checkRegisterCode(String code) async {
   }
 }
 
-Future<bool> addAccount(String userUid, Account account) async {
+Future<bool> addAccount(String userUid, Account account, String email) async {
   try {
     await FirebaseFirestore.instance.collection('accounts').doc(userUid).set({
       'name': account.name,
       'role': account.role,
       'store_uid': account.storeUid,
+      'email': email,
     });
     return true;
   } catch (e) {

@@ -16,8 +16,9 @@ class LoginController extends GetxController {
     );
     if (response != 'success') {
       Get.snackbar('Error', response.toString());
+    } else {
+      AccountState.account.value = await getCurrentAccount();
+      debugPrint(AccountState.account.value.name);
     }
-    AccountState.account.value = await getCurrentAccount();
-    debugPrint(AccountState.account.value.name);
   }
 }

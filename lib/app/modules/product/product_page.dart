@@ -35,10 +35,12 @@ class ProductPage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
               icon: const Icon(
-                Icons.shopping_cart,
+                Icons.refresh,
                 color: Colors.black,
               ),
-              onPressed: () {},
+              onPressed: () async {
+                controller.fetchProducts();
+              },
             ),
           ),
         ],

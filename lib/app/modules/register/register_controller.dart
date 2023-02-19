@@ -48,7 +48,7 @@ class RegisterController extends GetxController {
           name: emailController.text,
           role: role,
           storeUid: RegisterState.store.value.id);
-      if (await addAccount(userUid, account)) {
+      if (await addAccount(userUid, account, emailController.text)) {
         Get.to(() => const RegisterSuccessPage(role: 'recruit'),
             transition: Transition.rightToLeftWithFade);
       } else {
@@ -103,7 +103,7 @@ class RegisterController extends GetxController {
     );
 
     //add user ke firestore
-    await addAccount(userUid, account);
+    await addAccount(userUid, account, emailController.text);
 
     return 'success';
   }
